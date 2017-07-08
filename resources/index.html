@@ -1,0 +1,41 @@
+<html ng-app="chatApp">
+  <head>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="main.js"></script>
+  </head>
+  <body>
+    <div class='container' ng-cloak ng-app="chatApp">
+      <h1>KateChat | By Sean</h1>
+      <div class='chatbox' ng-controller="MessageCtrl as chatMessage">
+        <div class='chatbox__user-list'>
+          <h1>User list</h1>
+          <div class='chatbox__user--away'>
+            <p>Kate Hambly</p>
+          </div>
+          <div class='chatbox__user--active'>
+            <p>Sean Lavoie</p>
+          </div>
+        </div>
+        <div id="texts" class="messageBox">
+          <div class="chatbox__messages" ng-repeat="message in messages">
+            <div class="chatbox__messages__user-message">
+              <div class="chatbox__messages__user-message--ind-message" ng-style="message.status == 'SENT' && {'float':'right'} || {'float':'left'}">
+                <p class="name">{{message.from}}</p>
+                <br/>
+                <p class="message">{{message.message}}</p>
+<!--                <p class="message">{{message.status}}</p>-->
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <form ng-submit="submitText()">
+          <input type="text" placeholder="Enter your message" ng-model="outbound">
+          <input type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;"/>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
