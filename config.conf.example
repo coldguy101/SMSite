@@ -1,0 +1,7 @@
+[logging]
+logpath = /
+
+[twilio]
+twilio_number = +0000000000
+account_sid = xxx
+auth_token = xxx

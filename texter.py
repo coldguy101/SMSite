@@ -9,13 +9,26 @@ import json
 import time
 import logging
 import datetime
+import ConfigParser
 
 from flask import Flask, request, send_from_directory
 from twilio.rest import Client
 from twilio.twiml.messaging_response import MessagingResponse
 
-LOG_FILE_PATH = '/root/messaging/messages.log'
-TWILIO_PHONE_NUMBER = '+12064832427'
+config = ConfigParser.ConfigParser()
+
+""" Enter your config file here.
+
+for section in config.sections():
+    print section
+    for option in config.options(section):
+        print option
+        print config.get(section, option)
+"""
+config.read('./sean.conf')
+
+LOG_FILE_PATH = config.get('logging', 'logpath')
+TWILIO_PHONE_NUMBER = config.get('twilio', 'twilio_number')
 
 app = Flask(__name__)
 
@@ -28,6 +41,10 @@ log.addHandler(handler)
 CURRENT_MESSAGE_LIST = list()
 NEW_MESSAGES = False
 
+@app.route('/')
+def default():
+    return send_from_directory('resources', 'index.html')
+
 @app.route('/<path:path>')
 def mainPage(path):
     return send_from_directory('resources', path)
@@ -38,8 +55,8 @@ def out():
     body = request.form['message']
 
     if recipient and body:
-        account_sid = 'xxx'
-        auth_token = 'xxx'
+        account_sid = config.get('twilio', 'account_sid')
+        auth_token = config.get('twilio', 'auth_token')
         client = Client(account_sid, auth_token)
 
         message = client.api.account.messages.create(
